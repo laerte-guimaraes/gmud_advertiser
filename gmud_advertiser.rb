@@ -2,12 +2,11 @@ require_relative 'github_client.rb'
 require_relative 'slack_client.rb'
 
 class GMUDAdvertiser
-  REPOSITORIES = %w[recurrent gateway vault backoffice].freeze
-
-  def initialize; end
+  def initialize(webhook)
+    @webhook = webhook
+  end
 
   def call
-    # scan_github_info
     send_notification
   rescue KeyError
     # Não foi possível obter credenciais de acesso
@@ -15,19 +14,13 @@ class GMUDAdvertiser
 
   private
 
-  attr_reader :gmuds_to_notificate
-
-  def scan_github_info
-    @gmuds_to_notificate = []
-
-    REPOSITORIES.each do |repository|
-      @gmuds_to_notificate << GithubClient.new(repository).call
-    end
-  end
+  attr_reader :webhook
 
   def send_notification
-    gmuds_to_notificate.reject(&:nil?).each do |gmud|
-      SlackClient.new(gmud).call
-    end
+    SlackClient.new(gmud).call
+  end
+
+  def gmud
+    GithubClient.new(webhook).call
   end
 end
