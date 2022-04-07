@@ -1,17 +1,10 @@
-require 'rest-client'
+require 'net/http'
 require 'json'
 
 module ApiClient
-  def request(verb, url, endpoint, body=nil)
-    response = RestClient::Request.execute(
-      method: verb,
-      url: url + endpoint,
-      payload: body&.to_json,
-      headers: { content_type: :json }
-    ).body
+  def post_notification(url, endpoint, body=nil)
+    uri = URI(url + endpoint)
 
-    JSON.parse(response)
-  rescue JSON::ParserError
-    response
+    Net::HTTP.post(uri, body)
   end
 end

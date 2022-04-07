@@ -10,13 +10,10 @@ class SlackClient
   end
 
   def call
-    request(
-      :post,
+    post_notification(
       'https://hooks.slack.com/services/',
       ENDPOINT,
-      {
-        "text": slack_message
-      }
+      { 'text': slack_message }.to_json
     )
   end
 

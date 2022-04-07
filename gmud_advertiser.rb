@@ -7,7 +7,7 @@ class GMUDAdvertiser
   def initialize; end
 
   def call
-    scan_github_info
+    # scan_github_info
     send_notification
   rescue KeyError
     # Não foi possível obter credenciais de acesso
@@ -31,5 +31,3 @@ class GMUDAdvertiser
     end
   end
 end
-
-GMUDAdvertiser.new.call 
