@@ -1,0 +1,11 @@
+version: '3.6'
+
+services:
+  gmud_advertiser:
+    command: ruby gmud_advertiser.rb
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+    env_file:
+      - .env
