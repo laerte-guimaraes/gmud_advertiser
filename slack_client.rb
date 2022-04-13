@@ -10,6 +10,8 @@ class SlackClient
   end
 
   def call
+    return unless gmud_hash
+
     post_notification(
       'https://hooks.slack.com/services/',
       ENDPOINT,
