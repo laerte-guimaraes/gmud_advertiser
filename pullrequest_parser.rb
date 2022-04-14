@@ -20,7 +20,7 @@ module PullRequestParser
 
     topic = nil
 
-    gmud['body'].each_line do |line|
+    gmud['body']&.each_line do |line|
       if TOPICS.include?(line)
         topic = DESCRIPTION_TOPIC.next
         next
