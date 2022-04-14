@@ -1,8 +1,8 @@
 module PullRequestParser
   TOPICS = [
-    "## O que mudou\n",
-    "## Riscos\n",
-    "## Impactos negativos previstos\n"
+    "## O que mudou\r\n",
+    "## Riscos\r\n",
+    "## Impactos negativos previstos\r\n"
   ].freeze
 
   DESCRIPTION_TOPIC = [:changes, :riskiness].to_enum
@@ -20,7 +20,7 @@ module PullRequestParser
 
     topic = nil
 
-    gmud['body'].each_line do |line|
+    gmud['body']&.each_line do |line|
       if TOPICS.include?(line)
         topic = DESCRIPTION_TOPIC.next
         next
