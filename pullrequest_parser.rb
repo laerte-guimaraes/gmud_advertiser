@@ -1,12 +1,4 @@
 module PullRequestParser
-  TOPICS = [
-    "## O que mudou\r\n",
-    "## Riscos\r\n",
-    "## Impactos negativos previstos\r\n"
-  ].freeze
-
-  DESCRIPTION_TOPIC = [:changes, :riskiness].to_enum
-
   module_function
 
   def gmud_hash(gmud)
@@ -14,6 +6,7 @@ module PullRequestParser
       repository: gmud['head']['repo']['name'].capitalize,
       number: gmud['number'],
       link: gmud['html_url'],
+      raw_description: gmud['body'],
       changes: '',
       riskiness: '' 
     }
@@ -21,13 +14,20 @@ module PullRequestParser
     topic = nil
 
     gmud['body']&.each_line do |line|
-      if TOPICS.include?(line)
-        topic = DESCRIPTION_TOPIC.next
+      if line.include?('## O que mudou')
+        topic = :changes
         next
+      elsif line.include?('## Riscos')
+        topic = :riskiness
+        next
+      elsif line.include?('## Impactos negativos previstos')
+        break
       end
 
       description[topic]&.concat(line) unless line.strip.empty?
     end
+
+    description
   rescue StopIteration
     description
   end

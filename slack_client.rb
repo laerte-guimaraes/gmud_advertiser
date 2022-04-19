@@ -24,6 +24,23 @@ class SlackClient
   attr_reader :gmud_hash
 
   def slack_message
+    if gmud_hash[:changes].empty? || gmud_hash[:riskiness].empty?
+      raw_template
+    else
+      full_template
+    end
+  end
+
+  def raw_template
+    <<-SLACK_MESSAGE
+<#{gmud_hash[:link]}|*#{gmud_hash[:repository]} - GMUD #{gmud_hash[:number]}*>
+
+*O que mudou* :repeat:
+#{gmud_hash[:raw_description]}
+    SLACK_MESSAGE
+  end
+
+  def full_template
     <<-SLACK_MESSAGE
 <#{gmud_hash[:link]}|*#{gmud_hash[:repository]} - GMUD #{gmud_hash[:number]}*>
 
